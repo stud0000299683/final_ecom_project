@@ -1,0 +1,52 @@
+@use '../base/variables' as *;
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-medium;
+  background-color: $primary-color;
+  color: white;
+
+  &__logo {
+    font-size: $font-size-large;
+    font-weight: bold;
+  }
+
+  &__items {
+    display: flex;
+    list-style: none;
+
+    @media (max-width: $breakpoint-mobile) {
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      flex-direction: column;
+      background-color: $primary-color;
+
+      &--open {
+        display: flex;
+      }
+    }
+  }
+
+  &__item {
+    margin-left: $spacing-large;
+
+    @media (max-width: $breakpoint-mobile) {
+      margin: $spacing-medium 0;
+      text-align: center;
+    }
+  }
+
+  &__hamburger {
+    display: none;
+    cursor: pointer;
+
+    @media (max-width: $breakpoint-mobile) {
+      display: block;
+    }
+  }
+}

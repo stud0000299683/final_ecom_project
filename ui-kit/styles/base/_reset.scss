@@ -1,0 +1,13 @@
+@use 'variables' as vars;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: vars.$font-family; 
+  line-height: 1.6;
+  color: vars.$text-color;
+}

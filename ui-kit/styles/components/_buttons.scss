@@ -1,0 +1,50 @@
+@use '../base/variables' as vars;
+@use 'sass:color';
+
+.button {
+  font-family: vars.$font-family;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  border: none;
+  display: inline-block;
+
+  &--primary {
+    background-color: vars.$primary-color;
+    color: white;
+
+    &:hover {
+      background-color: color.adjust(vars.$primary-color, $lightness: -10%);
+    }
+  }
+
+  &--secondary {
+    background-color: vars.$secondary-color;
+    color: white;
+
+    &:hover {
+      background-color: color.adjust(vars.$secondary-color, $lightness: -10%);
+    }
+  }
+
+  &--disabled {
+    background-color: vars.$disabled-color;
+    cursor: not-allowed;
+  }
+
+  &--small {
+    padding: vars.$spacing-small vars.$spacing-medium;
+    font-size: vars.$font-size-small;
+  }
+
+  &--medium {
+    padding: vars.$spacing-medium;
+    font-size: vars.$font-size-medium;
+  }
+
+  &--large {
+    padding: vars.$spacing-large;
+    font-size: vars.$font-size-large;
+  }
+}

@@ -1,0 +1,42 @@
+@use '../base/variables' as vars;
+@use 'sass:color';
+
+.card {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+  background: white;
+
+  &__image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  &__content {
+    padding: vars.$spacing-medium;
+  }
+
+  &__title {
+    margin: 0 0 vars.$spacing-small 0;
+    font-size: vars.$font-size-large;
+  }
+
+  &__text {
+    margin: 0;
+    color: color.adjust(vars.$text-color, $lightness: 20%);
+    font-size: vars.$font-size-medium;
+  }
+
+  &--small {
+    max-width: 240px;
+  }
+
+  &--medium {
+    max-width: 320px;
+  }
+
+  &--large {
+    max-width: 480px;
+  }
+}

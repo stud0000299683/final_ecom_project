@@ -1,0 +1,11 @@
+// Базовые стили элементов
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  line-height: 1.5;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

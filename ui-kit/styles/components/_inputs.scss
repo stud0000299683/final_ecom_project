@@ -1,0 +1,39 @@
+@use '../base/variables' as *;
+
+.input {
+  &__container {
+    position: relative;
+    margin-bottom: $spacing-medium;
+  }
+
+  &__field {
+    width: 100%;
+    padding: $spacing-medium;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: $font-size-medium;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+      box-shadow: 0 0 0 2px rgba($primary-color, 0.2);
+    }
+
+    &--error {
+      border-color: $error-color;
+    }
+  }
+
+  &__icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  &__error {
+    color: $error-color;
+    font-size: $font-size-small;
+    margin-top: $spacing-small;
+  }
+}
