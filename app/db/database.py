@@ -3,6 +3,8 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sess
 from sqlalchemy.orm import sessionmaker, declarative_base
 from contextlib import asynccontextmanager, contextmanager
 import logging
+from app.db.models import engine
+
 
 # Настройка логгера
 logger = logging.getLogger(__name__)
@@ -12,7 +14,7 @@ Base = declarative_base()
 
 # Настройка подключения
 PG_URL = 'postgresql+asyncpg://postgres:postgre@localhost:5433/postgres'
-
+# SQLITE_URL = "sqlite+aiosqlite:///./sql_app.db"
 class Database:
     def __init__(self):
         self.engine = create_async_engine(
@@ -68,6 +70,11 @@ class Database:
         finally:
             session.close()
 
+
+
+async def get_db():
+    async with AsyncSession(engine) as session:
+        yield session
 
 db = Database()
 

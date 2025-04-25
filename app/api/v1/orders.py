@@ -23,7 +23,7 @@ class OrderResponse(OrderBase):
     order_details: List[int] = []
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class OrderDetailBase(BaseModel):
@@ -40,7 +40,7 @@ class OrderDetailResponse(OrderDetailBase):
     order_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 async def get_db():

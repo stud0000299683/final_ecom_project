@@ -24,7 +24,7 @@ class ReviewResponse(ReviewBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 async def get_db():

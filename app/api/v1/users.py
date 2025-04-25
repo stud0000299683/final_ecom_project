@@ -17,7 +17,7 @@ from app.api.v1.auth import (
     get_current_user, verify_password,
 )
 
-router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter( tags=["users"])
 
 
 # Pydantic schemas
@@ -38,7 +38,7 @@ class UserResponse(UserBase):
     id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 
 class ChangePasswordRequest(BaseModel):
