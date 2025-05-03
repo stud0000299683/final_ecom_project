@@ -17,7 +17,8 @@ from app.api.v1.auth import (
     get_current_user, verify_password,
 )
 
-router = APIRouter( tags=["users"])
+router = APIRouter(tags=["users"])
+# router = APIRouter(prefix="/api/v1/users", tags=["users"])
 
 
 # Pydantic schemas

@@ -1,5 +1,5 @@
 import asyncio
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float, Table
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float, Table, Text
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio import AsyncAttrs
@@ -37,6 +37,8 @@ class Category(Base):
     __tablename__ = 'categories'
     id = Column(Integer, Identity(), primary_key=True)
     name = Column(String(100), unique=True, index=True)
+    image_url = Column(String(255), nullable=True)  # URL изображения категории
+    thumbnail_url = Column(String(255), nullable=True)  # URL миниатюры
     products = relationship("Product", back_populates="category")
 
 
@@ -49,6 +51,8 @@ class Product(Base):
     price = Column(Float)
     rating = Column(Float, default=0.0)
     description = Column(String, nullable=True)
+    main_image = Column(String(255), nullable=True)  # Основное изображение товара
+    additional_images = Column(Text, nullable=True)  # JSON массив дополнительных изображений
     category = relationship("Category", back_populates="products")
     reviews = relationship("Review", back_populates="product")
 

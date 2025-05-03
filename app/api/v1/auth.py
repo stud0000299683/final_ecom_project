@@ -28,7 +28,7 @@ def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/users/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/users/token")
 
 
 class Token(BaseModel):

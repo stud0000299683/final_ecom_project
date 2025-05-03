@@ -1,11 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Profile from './pages/Profile';
+import { FavouritesProvider } from './context/FavouritesContext';
 import { getCurrentUser } from './services/auth';
 import './styles.css';
+
+// Ленивая загрузка страниц
+const Home = lazy(() => import('./pages/Home'));
+const Login = lazy(() => import('./pages/Login'));
+const Profile = lazy(() => import('./pages/Profile'));
+const CategoryPage = lazy(() => import('./pages/Category'));
+const ProductPage = lazy(() => import('./pages/Product'));
+const Favourites = lazy(() => import('./pages/Favourites'));
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -39,30 +45,25 @@ const App = () => {
           Вы находитесь в офлайн-режиме. Некоторые данные могут быть устаревшими.
         </div>
       )}
-      <Navbar 
-        isAuthenticated={isAuthenticated} 
-        onLogout={() => {
-          localStorage.removeItem('user');
-          setIsAuthenticated(false);
-        }} 
-      />
-      <Routes>
-        <Route path="/" element={<Home isAuthenticated={isAuthenticated} />} />
-        <Route 
-          path="/login" 
-          element={<Login onLogin={() => setIsAuthenticated(true)} />} 
+      <FavouritesProvider>
+        <Navbar
+          isAuthenticated={isAuthenticated}
+          onLogout={() => {
+            localStorage.removeItem('user');
+            setIsAuthenticated(false);
+          }}
         />
-        <Route 
-          path="/profile" 
-          element={
-            isAuthenticated ? (
-              <Profile />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          } 
-        />
-      </Routes>
+        <Suspense fallback={<div className="text-center my-5">Загрузка...</div>}>
+          <Routes>
+            <Route path="/" element={<Home isAuthenticated={isAuthenticated} />} />
+            <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
+            <Route path="/profile" element={isAuthenticated ? (<Profile />) : (<Navigate to="/login" replace />)} />
+            <Route path="/category/:id" element={isAuthenticated ? (<CategoryPage />) : (<Navigate to="/login" replace />)} />
+            <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/favourites" element={<Favourites />} />
+          </Routes>
+        </Suspense>
+      </FavouritesProvider>
     </div>
   );
 };
