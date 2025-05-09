@@ -117,16 +117,47 @@ async def create_product(
         raise HTTPException(status_code=400, detail=str(e))
 
 
+# @router.get("/", response_model=List[ProductResponse])
+# async def read_products(
+#         db: AsyncSession = Depends(get_db),
+#         skip: int = 0,
+#         limit: int = 100,
+#         category_id: Optional[int] = Query(None)  # Явное указание Query параметра
+# ):
+#     query = select(Product).offset(skip).limit(limit)
+#     if category_id is not None:  # Явная проверка на None
+#         query = query.where(Product.category_id == category_id)
+#
+#     result = await db.execute(query)
+#     products = result.scalars().all()
+#
+#     # Преобразование JSON строки в список
+#     for product in products:
+#         if product.additional_images:
+#             try:
+#                 product.additional_images_urls = json.loads(product.additional_images)
+#             except json.JSONDecodeError:
+#                 product.additional_images_urls = []
+#
+#     return products
+
 @router.get("/", response_model=List[ProductResponse])
 async def read_products(
         db: AsyncSession = Depends(get_db),
         skip: int = 0,
         limit: int = 100,
-        category_id: Optional[int] = Query(None)  # Явное указание Query параметра
+        category_id: Optional[int] = Query(None),
+        ids: Optional[str] = Query(None)  # Добавляем параметр для фильтрации по ID
 ):
     query = select(Product).offset(skip).limit(limit)
-    if category_id is not None:  # Явная проверка на None
+
+    if category_id is not None:
         query = query.where(Product.category_id == category_id)
+
+    if ids:
+        # Преобразуем строку "1,2,3" в список [1, 2, 3]
+        id_list = [int(id) for id in ids.split(",")]
+        query = query.where(Product.id.in_(id_list))
 
     result = await db.execute(query)
     products = result.scalars().all()

@@ -1,5 +1,5 @@
 import asyncio
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float, Table, Text
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float, Table, Text, text
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.ext.asyncio import AsyncAttrs
@@ -42,21 +42,6 @@ class Category(Base):
     products = relationship("Product", back_populates="category")
 
 
-# Товары
-class Product(Base):
-    __tablename__ = 'products'
-    id = Column(Integer, Identity(), primary_key=True)
-    name = Column(String(255), index=True)
-    category_id = Column(Integer, ForeignKey('categories.id'))
-    price = Column(Float)
-    rating = Column(Float, default=0.0)
-    description = Column(String, nullable=True)
-    main_image = Column(String(255), nullable=True)  # Основное изображение товара
-    additional_images = Column(Text, nullable=True)  # JSON массив дополнительных изображений
-    category = relationship("Category", back_populates="products")
-    reviews = relationship("Review", back_populates="product")
-
-
 # Отзывы
 class Review(Base):
     __tablename__ = 'reviews'
@@ -70,20 +55,41 @@ class Review(Base):
 
 
 # Корзина
+# Таблица связи многие-ко-многим
 cart_items = Table(
     'cart_items',
     Base.metadata,
-    Column('cart_id', Integer, ForeignKey('carts.id')),
-    Column('product_id', Integer, ForeignKey('products.id'))
+    Column('cart_id', Integer, ForeignKey('carts.id'), primary_key=True),
+    Column('product_id', Integer, ForeignKey('products.id'), primary_key=True)
 )
+
+
+# Товары
+class Product(Base):
+    __tablename__ = 'products'
+    id = Column(Integer, Identity(), primary_key=True)
+    name = Column(String(255), index=True)
+    category_id = Column(Integer, ForeignKey('categories.id'))
+    price = Column(Float)
+    rating = Column(Float, default=0.0)
+    description = Column(String, nullable=True)
+    main_image = Column(String(255), nullable=True)
+    additional_images = Column(Text, nullable=True)
+
+    # Отношения
+    category = relationship("Category", back_populates="products")
+    reviews = relationship("Review", back_populates="product")
+    carts = relationship("Cart", secondary=cart_items, back_populates="items")  # Добавлено
 
 
 class Cart(Base):
     __tablename__ = 'carts'
-    id = Column(Integer, Identity(), primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    items = relationship("Product", secondary=cart_items)
+
+    id = Column(Integer, Identity(),  primary_key=True )
+    user_id = Column(Integer, ForeignKey('users.id'), unique=True)
+
     user = relationship("User", back_populates="carts")
+    items = relationship("Product", secondary=cart_items, back_populates="carts", lazy='selectin')
 
 
 # Заказы

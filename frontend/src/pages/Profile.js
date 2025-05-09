@@ -12,7 +12,7 @@ const Profile = () => {
           const data = await getUserProfile(token);
           setUserData(data);
         } catch (error) {
-          console.error('Профиль не смогли отобразить:', error);
+          console.error('РџСЂРѕС„РёР»СЊ РЅРµ СЃРјРѕРіР»Рё РѕС‚РѕР±СЂР°Р·РёС‚СЊ:', error);
         }
       }
     };

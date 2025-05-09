@@ -1,59 +1,43 @@
-import React, { useContext } from 'react';
-import { Link } from 'react-router-dom';
-import { FavouritesContext } from '../context/FavouritesContext';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useFavourites } from '../context/FavouritesContext';
+import { useCart } from '../context/CartContext';
+import { Button } from 'react-bootstrap';
 
 const Navbar = ({ isAuthenticated, onLogout }) => {
-  const { favourites } = useContext(FavouritesContext);
+  const { favourites } = useFavourites();
+  const { cart } = useCart();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    onLogout();
+    navigate('/'); // Перенаправляем на главную после выхода
+  };
 
   return (
-    <nav style={{ padding: '10px', background: '#f0f0f0', display: 'flex', alignItems: 'center' }}>
-      <Link to="/" style={{ marginRight: '15px', textDecoration: 'none' }}>Главная</Link>
-      {isAuthenticated ? (
-        <>
-          <Link to="/profile" style={{ marginRight: '15px', textDecoration: 'none' }}>Профиль</Link>
-          <Link
-            to="/favourites"
-            style={{
-              marginRight: '15px',
-              textDecoration: 'none',
-              position: 'relative'
-            }}
-          >
-            Избранное
-            {favourites.length > 0 && (
-              <span style={{
-                position: 'absolute',
-                top: '-8px',
-                right: '-8px',
-                background: '#ff4444',
-                color: 'white',
-                borderRadius: '50%',
-                width: '20px',
-                height: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '12px'
-              }}>
-                {favourites.length}
-              </span>
-            )}
-          </Link>
-          <button
-            onClick={onLogout}
-            style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              color: '#333'
-            }}
-          >
-            Выйти
-          </button>
-        </>
-      ) : (
-        <Link to="/login" style={{ textDecoration: 'none' }}>Войти</Link>
-      )}
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <div className="container">
+        <Link className="navbar-brand" to="/">Магазин</Link>
+        <div className="d-flex">
+          {isAuthenticated ? (
+            <>
+              <Link className="nav-link mx-2" to="/profile">Профиль</Link>
+              <Link className="nav-link mx-2" to="/favourites">
+                Избранное {favourites.length > 0 && `(${favourites.length})`}
+              </Link>
+              <Link className="nav-link mx-2" to="/cart">
+                Корзина {cart?.items?.length > 0 && <span className="badge bg-primary">{cart.items.length}</span>}
+              </Link>
+              <Button variant="outline-danger" className="ms-2" onClick={handleLogout}>Выйти</Button>
+            </>
+          ) : (
+            <>
+              <Link className="nav-link" to="/login">Войти</Link>
+              <Link className="nav-link" to="/cart">Корзина</Link>
+            </>
+          )}
+        </div>
+      </div>
     </nav>
   );
 };

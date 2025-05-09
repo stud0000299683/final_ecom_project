@@ -1,5 +1,4 @@
-import React, { createContext, useState, useEffect, useCallback, useMemo } from 'react';
-// Добавлен импорт useMemo ↑
+import React, { createContext, useState, useEffect, useCallback, useMemo, useContext } from 'react';
 
 export const FavouritesContext = createContext();
 
@@ -48,4 +47,26 @@ export const FavouritesProvider = ({ children }) => {
       {children}
     </FavouritesContext.Provider>
   );
+
+    const value = useMemo(() => ({
+    favourites,
+    addToFavourites,
+    removeFromFavourites,
+    isFavourite
+  }), [favourites, addToFavourites, removeFromFavourites, isFavourite]);
+
+  return (
+    <FavouritesContext.Provider value={value}>
+      {children}
+    </FavouritesContext.Provider>
+  );
+};
+
+// Создаем кастомный хук для удобства использования
+export const useFavourites = () => {
+  const context = useContext(FavouritesContext);
+  if (context === undefined) {
+    throw new Error('useFavourites must be used within a FavouritesProvider');
+  }
+  return context;
 };
