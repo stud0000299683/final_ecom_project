@@ -32,11 +32,8 @@ const Favourites = () => {
             <Col key={product.id} md={4} className="mb-4">
               <Card className="h-100">
                 {product.image && (
-                  <Card.Img
-                    variant="top"
-                    src={`http://localhost:8000${product.image}`}
-                    style={{ height: '200px', objectFit: 'cover' }}
-                  />
+                  <Card.Img variant="top" src={`http://localhost:8000${product.image}`}
+                    style={{ height: '200px', objectFit: 'cover' }} />
                 )}
                 <Card.Body className="d-flex flex-column">
                   <Card.Title>{product.name}</Card.Title>
@@ -45,19 +42,8 @@ const Favourites = () => {
                     <ListGroup.Item>Категория: {product.category_id}</ListGroup.Item>
                   </ListGroup>
                   <div className="mt-auto d-flex gap-2">
-                    <Button
-                      as={Link}
-                      to={`/product/${product.id}`}
-                      variant="primary"
-                    >
-                      Подробнее
-                    </Button>
-                    <Button
-                      variant="danger"
-                      onClick={() => removeFromFavourites(product.id)}
-                    >
-                      Удалить
-                    </Button>
+                    <Button as={Link} to={`/product/${product.id}`} variant="primary">Подробнее</Button>
+                    <Button variant="danger" onClick={() => removeFromFavourites(product.id)}>Удалить</Button>
                   </div>
                 </Card.Body>
               </Card>

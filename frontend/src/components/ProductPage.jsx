@@ -25,7 +25,6 @@ const ProductPage = () => {
   };
 
   return (
-    // ... в кнопке избранного:
     <Button
       variant={isFav ? "danger" : "outline-secondary"}
       onClick={toggleFavourite}

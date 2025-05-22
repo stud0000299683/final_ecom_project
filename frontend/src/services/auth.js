@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api/v1'; // Замените на ваш URL FastAPI
+const API_URL = 'http://localhost:8000/api/v1';
 
 export const login = async (username, password) => {
   const formData = new FormData();

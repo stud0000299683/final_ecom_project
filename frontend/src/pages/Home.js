@@ -49,13 +49,7 @@ const Home = ({ isAuthenticated }) => {
               )}
               <Card.Body>
                 <Card.Title>{category.name}</Card.Title>
-                <Button
-                  as={Link}
-                  to={`/category/${category.id}`}
-                  variant="primary"
-                >
-                  Перейти
-                </Button>
+                <Button as={Link} to={`/category/${category.id}`} variant="primary">Перейти</Button>
               </Card.Body>
             </Card>
           </Col>

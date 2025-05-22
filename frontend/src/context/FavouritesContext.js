@@ -34,7 +34,7 @@ export const FavouritesProvider = ({ children }) => {
     return favourites.some(item => item.id === productId);
   }, [favourites]);
 
-  // Мемоизированное значение контекста
+
   const contextValue = useMemo(() => ({
     favourites,
     addToFavourites,
@@ -62,7 +62,7 @@ export const FavouritesProvider = ({ children }) => {
   );
 };
 
-// Создаем кастомный хук для удобства использования
+// Создаем хук
 export const useFavourites = () => {
   const context = useContext(FavouritesContext);
   if (context === undefined) {

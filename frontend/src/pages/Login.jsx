@@ -54,39 +54,22 @@ const Login = ({ onLogin }) => {
     <div className="container py-5">
       <Card className="mx-auto" style={{ maxWidth: '500px' }}>
         <Card.Body>
-          <Tabs
-            activeKey={activeTab}
-            onSelect={(k) => {
-              setActiveTab(k);
-              setError('');
-            }}
-            className="mb-3"
-          >
+          <Tabs activeKey={activeTab} onSelect={(k) => {setActiveTab(k); setError('');}} className="mb-3">
             <Tab eventKey="login" title="Вход">
               <h2 className="mb-4">Вход в систему</h2>
               {error && activeTab === 'login' && <Alert variant="danger">{error}</Alert>}
               <Form onSubmit={handleLogin}>
                 <Form.Group className="mb-3">
                   <Form.Label>Имя пользователя</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                  />
+                  <Form.Control type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Пароль</Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                  <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)}
                     required
                   />
                 </Form.Group>
-                <Button variant="primary" type="submit" className="w-100">
-                  Войти
-                </Button>
+                <Button variant="primary" type="submit" className="w-100">Войти</Button>
               </Form>
             </Tab>
 
@@ -96,54 +79,31 @@ const Login = ({ onLogin }) => {
               <Form onSubmit={handleRegister}>
                 <Form.Group className="mb-3">
                   <Form.Label>Имя пользователя</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                  <Form.Control type="text" value={username} onChange={(e) => setUsername(e.target.value)}
                     required
                     minLength={3}
                   />
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Пароль</Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                  <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={8}
                   />
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
+                  <Form.Control type="email" value={email} onChange={(e) => setEmail(e.target.value)}required />
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Имя</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    required
-                  />
+                  <Form.Control type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)}required />
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Фамилия</Form.Label>
-                  <Form.Control
-                    type="text"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                    required
-                  />
+                  <Form.Control type="text" value={lastName} onChange={(e) => setLastName(e.target.value)}required/>
                 </Form.Group>
-                <Button variant="success" type="submit" className="w-100">
-                  Зарегистрироваться
-                </Button>
+                <Button variant="success" type="submit" className="w-100">Зарегистрироваться</Button>
               </Form>
             </Tab>
           </Tabs>
