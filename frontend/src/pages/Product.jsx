@@ -11,12 +11,14 @@ import { FavouritesContext } from '../context/FavouritesContext';
 import { useCart } from '../context/CartContext';
 import { getCurrentUser } from '../services/auth';
 
+// Функция для получения URL изображения
 const getImageUrl = (path) => {
-  if (!path) return '/placeholder-image.jpg';
-  if (path.startsWith('http')) return path;
-  return `http://localhost:8000${path}`;
+  if (!path) return '/placeholder-image.jpg'; // Заглушка если нет изображения
+  if (path.startsWith('http')) return path; // Если URL абсолютный
+  return `http://localhost:8000${path}`; // Локальный путь
 };
 
+// Компонент изображений товара (оптимизирован с memo)
 const ProductImages = memo(({ mainImage, additionalImages, onImageClick }) => {
   return (
     <Card className="mb-4">
@@ -24,7 +26,7 @@ const ProductImages = memo(({ mainImage, additionalImages, onImageClick }) => {
         <Card.Img
           variant="top"
           src={getImageUrl(mainImage)}
-          alt="Main product"
+          alt="Основное изображение товара"
           style={{
             maxHeight: '500px',
             width: '100%',
@@ -33,18 +35,24 @@ const ProductImages = memo(({ mainImage, additionalImages, onImageClick }) => {
           }}
           className="p-3"
           onError={(e) => {
-            e.target.src = '/placeholder-image.jpg';
+            e.target.src = '/placeholder-image.jpg'; // Замена битого изображения
           }}
         />
       )}
       {additionalImages && additionalImages.length > 0 && (
-        <Carousel className="mt-3" indicators>
+        <Carousel
+          className="mt-3"
+          indicators
+          // Черные стрелки для карусели
+          prevIcon={<span aria-hidden="true" className="carousel-control-prev-icon" style={{ filter: 'brightness(0)' }} />}
+          nextIcon={<span aria-hidden="true" className="carousel-control-next-icon" style={{ filter: 'brightness(0)' }} />}
+        >
           {additionalImages.map((img, index) => (
             <Carousel.Item key={index}>
               <img
                 className="d-block w-100"
                 src={getImageUrl(img)}
-                alt={`Product view ${index + 1}`}
+                alt={`Изображение товара ${index + 1}`}
                 style={{
                   height: '300px',
                   objectFit: 'contain',
@@ -63,13 +71,26 @@ const ProductImages = memo(({ mainImage, additionalImages, onImageClick }) => {
   );
 });
 
+/**
+ * Компонент страницы товара
+ * Отображает полную информацию о товаре:
+ * - Изображения с каруселью
+ * - Название, цену и описание
+ * - Кнопки добавления в корзину и избранное
+ * - Характеристики товара
+ */
 const ProductPage = () => {
+  // Получение параметров из URL
   const { id } = useParams();
   const navigate = useNavigate();
+
+  // Состояния для данных товара и UI
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mainImage, setMainImage] = useState('');
+
+  // Состояния для уведомлений
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [showAuthAlert, setShowAuthAlert] = useState(false);
@@ -80,16 +101,24 @@ const ProductPage = () => {
   });
   const [isItemInCart, setIsItemInCart] = useState(false);
 
+  // Контексты для избранного и корзины
   const { addToFavourites, removeFromFavourites, isFavourite } = useContext(FavouritesContext);
   const { addToCart, isInCart } = useCart();
+
+  // Проверка авторизации пользователя
   const isAuthenticated = !!getCurrentUser();
   const [isFav, setIsFav] = useState(false);
 
+  /**
+   * Загрузка данных товара с API
+   * Нормализует структуру данных для единообразия
+   */
   const fetchProduct = useCallback(async () => {
     try {
       const response = await axios.get(`http://localhost:8000/api/v1/products/${id}`);
       const productData = response.data;
 
+      // Нормализация данных товара
       const normalizedProduct = {
         ...productData,
         main_image: productData.main_image || productData.image || '',
@@ -110,10 +139,15 @@ const ProductPage = () => {
     }
   }, [id, isFavourite, isInCart]);
 
+  // Загрузка товара при монтировании компонента
   useEffect(() => {
     fetchProduct();
   }, [fetchProduct]);
 
+  /**
+   * Обработчик добавления/удаления из избранного
+   * Показывает предупреждение если пользователь не авторизован
+   */
   const handleFavouriteAction = useCallback(() => {
     if (!isAuthenticated) {
       setShowAuthAlert(true);
@@ -139,49 +173,54 @@ const ProductPage = () => {
     setShowToast(true);
   }, [isAuthenticated, product, isFavourite, addToFavourites, removeFromFavourites, isFav]);
 
+  /**
+   * Обработчик добавления в корзину
+   * Показывает предупреждение если пользователь не авторизован
+   * Обновляет состояние корзины и показывает уведомления
+   */
   const handleCartAction = useCallback(async () => {
-  console.log("1. Кнопка нажата!");
+    if (!isAuthenticated) {
+      setShowAuthAlert(true);
+      return;
+    }
 
-  if (!isAuthenticated) {
-    console.log("2. Пользователь не авторизован");
-    setShowAuthAlert(true);
-    return;
-  }
+    if (!product) return;
 
+    const success = await addToCart(product.id);
+    if (success) {
+      setIsItemInCart(true);
+      setCartToast({
+        show: true,
+        message: 'Товар добавлен в корзину',
+        variant: 'success'
+      });
+    } else {
+      setCartToast({
+        show: true,
+        message: error || 'Не удалось добавить товар в корзину',
+        variant: 'danger'
+      });
+    }
+  }, [isAuthenticated, product, addToCart]);
 
-  if (!product) return;
-
-  const success = await addToCart(product.id);
-  if (success) {
-    setIsItemInCart(true);
-    setCartToast({
-      show: true,
-      message: 'Товар добавлен в корзину',
-      variant: 'success'
-    });
-  } else {
-    setCartToast({
-      show: true,
-      message: error || 'Не удалось добавить товар в корзину',
-      variant: 'danger'
-    });
-  }
-}, [isAuthenticated, product, addToCart]);
-
+  // Обновляет основное изображение при клике на миниатюру
   const handleImageClick = useCallback((img) => {
     setMainImage(img);
   }, []);
 
+  // Перенаправление на страницу входа с сохранением URL
   const handleLoginRedirect = () => {
     navigate('/login', { state: { from: `/product/${id}` } });
   };
 
+  // Состояния загрузки и ошибки
   if (loading) return <Spinner animation="border" className="d-block mx-auto my-5" />;
   if (error) return <Alert variant="danger">{error}</Alert>;
   if (!product) return <Alert variant="warning">Товар не найден</Alert>;
 
   return (
     <Container className="py-4">
+      {/* Уведомление об избранном */}
       <Toast show={showToast} onClose={() => setShowToast(false)} delay={3000} autohide>
         <Toast.Header>
           <strong className="me-auto">Избранное</strong>
@@ -189,6 +228,7 @@ const ProductPage = () => {
         <Toast.Body>{toastMessage}</Toast.Body>
       </Toast>
 
+      {/* Уведомление о корзине */}
       <Toast
         show={cartToast.show}
         onClose={() => setCartToast(prev => ({...prev, show: false}))}
@@ -199,6 +239,7 @@ const ProductPage = () => {
         <Toast.Body className="text-white">{cartToast.message}</Toast.Body>
       </Toast>
 
+      {/* Предупреждение о необходимости авторизации */}
       <Toast show={showAuthAlert} onClose={() => setShowAuthAlert(false)} delay={3000} autohide>
         <Toast.Header closeButton={false} className="bg-warning">
           <strong className="me-auto">Требуется авторизация</strong>
@@ -210,7 +251,9 @@ const ProductPage = () => {
         </Toast.Body>
       </Toast>
 
+      {/* Основное содержимое страницы */}
       <Row>
+        {/* Колонка с изображениями */}
         <Col md={6}>
           <ProductImages
             mainImage={mainImage}
@@ -219,6 +262,7 @@ const ProductPage = () => {
           />
         </Col>
 
+        {/* Колонка с информацией о товаре */}
         <Col md={6}>
           <Card className="mb-4 h-100">
             <Card.Body className="d-flex flex-column">
@@ -244,7 +288,7 @@ const ProductPage = () => {
                   onClick={handleCartAction}
                   disabled={isItemInCart}
                 >
-                   {isItemInCart ? 'В корзине ✓' : 'Добавить в корзину'}
+                  {isItemInCart ? 'В корзине ✓' : 'Добавить в корзину'}
                 </Button>
                 <Button
                   variant={isAuthenticated ? (isFav ? "danger" : "outline-secondary") : "outline-warning"}
@@ -260,6 +304,7 @@ const ProductPage = () => {
         </Col>
       </Row>
 
+      {/* Секция с характеристиками товара */}
       <Row className="mt-4">
         <Col>
           <Card>
