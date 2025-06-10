@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
   Card,
@@ -8,8 +8,7 @@ import {
   Spinner,
   Alert,
   Container,
-  Button,
-  Breadcrumb
+  Button
 } from 'react-bootstrap';
 
 /**
@@ -92,7 +91,7 @@ const CategoryPage = () => {
         <Row xs={1} sm={2} md={3} lg={4} className="g-4">
           {products.map(product => (
             <Col key={product.id}>
-              {/* Карточка товара - вся кликабельна */}
+              {/* Карточка товара */}
               <Card
                 className="h-100 shadow-sm hover-shadow transition-all"
                 onClick={() => handleProductClick(product.id)}

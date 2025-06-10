@@ -79,7 +79,7 @@ const Home = ({ isAuthenticated }) => {
               onClick={() => handleCategoryClick(category.id)}
               style={{ cursor: 'pointer' }}
             >
-              {/* Кликабельное изображение категории */}
+              {/* Изображение категории */}
               <div
                 style={{ height: '460px', overflow: 'hidden' }}
                 onClick={(e) => {
@@ -106,14 +106,8 @@ const Home = ({ isAuthenticated }) => {
                 </Card.Title>
 
                 {/* Кнопка для семантики и доступности */}
-                <Button
-                  variant="outline-primary"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleCategoryClick(category.id);
-                  }}
-                  className="mt-auto"
-                >
+                <Button variant="outline-primary" onClick={(e) => {e.stopPropagation();
+                    handleCategoryClick(category.id);}} className="mt-auto">
                   Перейти в категорию
                 </Button>
               </Card.Body>
