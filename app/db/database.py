@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 Base = declarative_base()
 
 # Настройка подключения
-PG_URL = 'postgresql+asyncpg://postgres:postgre@localhost:5433/postgres'
+PG_URL = 'postgresql+asyncpg://postgres:postgres@localhost:5432/postgres'
 # SQLITE_URL = "sqlite+aiosqlite:///./sql_app.db"
 class Database:
     def __init__(self):

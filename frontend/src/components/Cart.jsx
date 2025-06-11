@@ -1,12 +1,12 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, ListGroup, Spinner, Alert, Badge } from 'react-bootstrap';
+import React, {useState, useEffect } from 'react';
+import { Container, Row, Col, Card, Button, ListGroup, Spinner, Alert} from 'react-bootstrap';
 import { useCart } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { getCurrentUser } from '../services/auth';
 
 const Cart = () => {
-  const { cart, loading, error, removeFromCart, fetchCart } = useCart();
+  const { cart, loading, error, removeFromCart} = useCart();
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
   const navigate = useNavigate();

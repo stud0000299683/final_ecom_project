@@ -55,7 +55,7 @@ export const CartProvider = ({ children }) => {
       } catch (error) {
         if (error.response?.status === 404) {
           const { data: newCart } = await api.post('/carts/', { user_id: user.id });
-          userCart = newCart;
+          //userCart = newCart;
         } else {
           throw error;
         }

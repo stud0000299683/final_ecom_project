@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy import Identity
 
 Base = declarative_base(cls=AsyncAttrs)
-PG_URL = 'postgresql+asyncpg://postgres:postgre@localhost:5433/postgres'
+PG_URL = 'postgresql+asyncpg://postgres:postgres@db:5432/postgres'
 engine = create_async_engine(PG_URL, echo=True)
 
 

@@ -7,7 +7,7 @@ from app.main import app
 from app.api.v1.category import get_db
 
 # Тестовая БД
-TEST_DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost:5433/test_db"
+TEST_DATABASE_URL = "postgresql+asyncpg://postgres:postgres@localhost:5432/test_db"
 
 
 @pytest.fixture(scope="function")
