@@ -28,16 +28,15 @@
 3. Доступ к сервисам
 После запуска будут доступны:
 
-Backend API: http://localhost:8000
-Frontend (React): http://localhost:3000
-Mobile (Ionic): http://localhost:8100
+- Backend API: http://localhost:8000
+- Frontend (React): http://localhost:3000
+- Mobile (Ionic): http://localhost:8100
 
-Админка PostgreSQL:
-Хост: localhost:5432
-Логин/пароль: postgres/postgres
-База данных: postgres
+- Админка PostgreSQL:
+- Хост: localhost:5432
+- Логин/пароль: postgres/postgres
+- База данных: postgres
 
 4. Остановка проекта
    ```bash
    docker-compose down
-
