@@ -23,7 +23,7 @@
 
    ```bash
    docker-compose up -d --build
-
+   ```   
 
 3. Доступ к сервисам
 После запуска будут доступны:
@@ -38,6 +38,6 @@ Mobile (Ionic): http://localhost:8100
 База данных: postgres
 
 4. Остановка проекта
-   ''''bash
+   ```bash
    docker-compose down
 
