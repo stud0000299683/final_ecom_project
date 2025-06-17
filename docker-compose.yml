@@ -27,7 +27,9 @@ services:
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@db:5432/postgres
       # Добавляем CORS настройки
-      CORS_ORIGINS: "http://localhost:8000,http://frontend:3000, http://localhost:3000"
+      CORS_ORIGINS: "http://localhost:8000,http://frontend:3000, http://localhost:3000, http://localhost:8100,
+      http://10.0.2.2,
+      http://192.168.1.*"
     ports:
       - "8000:8000"
     volumes:
@@ -52,6 +54,25 @@ services:
       - app
     stdin_open: true
     tty: true
+
+  mobile:
+    container_name: ecom_mobile
+    build:
+      context: ./myMobileApp
+      dockerfile: Dockerfile
+    ports:
+      - "8100:8100"  
+      - "35729:35729"  
+    volumes:
+      - ./myMobileApp:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - app  
+    stdin_open: true
+    tty: true
+    command: sh -c "npm install && ionic serve --external"
 
 volumes:
   postgres_data:

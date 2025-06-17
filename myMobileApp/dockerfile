@@ -1,0 +1,19 @@
+# Dockerfile для Ionic проекта
+FROM node:16-alpine
+
+WORKDIR /app
+
+# Установка зависимостей
+COPY package.json package-lock.json ./
+RUN npm install -g @ionic/cli
+RUN npm install
+
+# Копирование остальных файлов
+COPY . .
+
+# Порт для ionic serve
+EXPOSE 8100
+EXPOSE 35729
+
+
+CMD ["ionic", "serve"]

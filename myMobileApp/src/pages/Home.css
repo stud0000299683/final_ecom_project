@@ -1,0 +1,14 @@
+/* Стили для меню */
+ion-menu {
+  --width: 250px;
+}
+
+ion-menu ion-item {
+  --padding-start: 16px;
+  --min-height: 50px;
+}
+
+ion-menu ion-icon {
+  margin-right: 12px;
+  color: var(--ion-color-primary);
+}
